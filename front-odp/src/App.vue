@@ -1,14 +1,24 @@
 <template>
-  <Dashboard msg="Welcome to Your Vue.js App" />
+  <div id="nav">
+    <router-link to="/">Home</router-link> |
+    <router-link to="/about">About</router-link> |
+    <router-link to="/register">Register</router-link>
+  </div>
+  <router-view />
 </template>
 
-<script>
-import Dashboard from "./components/page/Dashboard.vue";
+<style lang="scss">
+#nav {
+  text-align: center;
+  padding: 30px;
 
-export default {
-  name: "App",
-  components: {
-    Dashboard,
-  },
-};
-</script>
+  a {
+    font-weight: bold;
+    color: #2c3e50;
+
+    &.router-link-exact-active {
+      color: #42b983;
+    }
+  }
+}
+</style>
