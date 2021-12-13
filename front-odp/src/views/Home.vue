@@ -1,9 +1,7 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-  </div>
+  <div class="home">WELCOME TO ODP 2021</div>
 </template>
 
 <script>
-// @ is an alias to /src
+export default {};
 </script>

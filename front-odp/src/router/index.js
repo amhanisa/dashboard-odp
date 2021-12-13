@@ -1,5 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
+import Dashboard from "../views/Dashboard.vue";
+import tokenService from "../services/token.service";
+
+const checkAccess = (to, from, next) => {
+  const token = tokenService.getLocalAccessToken();
+  if (token) {
+    next();
+  } else {
+    console.log("asd");
+  }
+};
+
+const checkAdmin = (to, from, next) => {
+  const user = tokenService.getUser();
+  if (user.role === "ROLE_ADMIN") {
+    next();
+  }
+};
 
 const routes = [
   {
@@ -8,13 +26,21 @@ const routes = [
     component: Home,
   },
   {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/sale",
+    name: "Sale",
+    component: () => import("../views/Sale.vue"),
+    beforeEnter: [checkAccess],
+  },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    beforeEnter: [checkAccess, checkAdmin],
   },
   {
     path: "/register",
