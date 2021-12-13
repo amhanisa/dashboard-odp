@@ -18,8 +18,8 @@ app.use(cors());
 app.use(express.json());
 
 const db = require("./app/models");
-
-db.sequelize.sync({ force: true }).then(() => {
+// { force: true }
+db.sequelize.sync().then(() => {
   console.log("reset database");
 });
 
@@ -27,13 +27,9 @@ app.get("/", (req, res) => {
   res.send("PKC ODP");
 });
 
-app.post("/api/register", (req, res) => {
-  console.log(req.body);
-  res.send(req.body.name);
-});
-
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
+require("./app/routes/sale.routes")(app);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

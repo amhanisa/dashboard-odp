@@ -21,6 +21,7 @@ db.sequelize = sequelize;
 
 db.user = require("../models/user.model")(sequelize, Sequelize);
 db.refreshToken = require("../models/refreshToken.model")(sequelize, Sequelize);
+db.sale = require("../models/sale.model")(sequelize, Sequelize);
 
 db.refreshToken.belongsTo(db.user, {
   foreignKey: "userId",
@@ -28,6 +29,16 @@ db.refreshToken.belongsTo(db.user, {
 });
 
 db.user.hasOne(db.refreshToken, {
+  foreignKey: "userId",
+  targetKey: "id",
+});
+
+db.sale.belongsTo(db.user, {
+  foreignKey: "userId",
+  targetKey: "id",
+});
+
+db.user.hasMany(db.sale, {
   foreignKey: "userId",
   targetKey: "id",
 });

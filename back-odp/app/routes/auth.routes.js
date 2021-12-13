@@ -9,9 +9,9 @@ module.exports = function (app) {
     next();
   });
 
-  app.post("/api/auth/signup", [], controller.signup);
+  app.post("/api/auth/register", [], controller.signup);
 
-  app.post("/api/auth/signin", [], controller.signin);
+  app.post("/api/auth/login", [], controller.signin);
 
   app.post("/api/auth/refreshtoken", controller.refreshToken);
 };
