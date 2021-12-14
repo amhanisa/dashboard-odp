@@ -10,6 +10,23 @@ module.exports = (app) => {
     next();
   });
 
-  app.post("/api/sale/add", [authJwt.verifyToken], controller.addSale);
   app.get("/api/sale", [authJwt.verifyToken], controller.getUserSales);
+  app.post("/api/sale/add", [authJwt.verifyToken], controller.addSale);
+  app.post(
+    "/api/sale/delete",
+    [authJwt.verifyToken],
+    controller.deleteUserSale
+  );
+
+  app.get(
+    "/api/sale/total",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getTotalSales
+  );
+  app.get(
+    "/api/sale/all",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getAllSales
+  );
+  app.get("/api/sale/sum", controller.getSumSales);
 };
