@@ -2,7 +2,6 @@
   <div>
     <h1>This is an about page</h1>
     <p>{{ content }}</p>
-
     <section>
       <h3>
         <strong>{{ currentUser.fullname }}</strong> Profile
@@ -30,13 +29,24 @@
         >
           Tambah Penjualan
         </button>
+        <div>
+          <DataTable :value="userSales" :paginator="true" :rows="10">
+            <Column field="quantity" header="Quantity"></Column>
+            <Column field="createdAt" header="Timestamp"></Column>
+          </DataTable>
+        </div>
       </div>
     </section>
 
     <Modal v-show="showModalAddSale" @close="closeModalAddSale">
       <template v-slot:header>Add Sale</template>
       <template v-slot:body>
-        <Form id="addSale" @submit="handleAddSale" :validation-schema="schema">
+        <Form
+          id="addSale"
+          @submit="handleAddSale"
+          :validation-schema="schema"
+          v-slot="{ isSubmitting }"
+        >
           <label for="quantity" class="block text-sm font-medium text-gray-700">
             Quantity
           </label>
@@ -57,22 +67,35 @@
             <Field type="number" name="quantity" class="pr-10 rounded-md" />
           </div>
           <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
+
+          <button
+            :disabled="isSubmitting"
+            form="addSale"
+            class="
+              px-6
+              py-2
+              bg-greenpkc
+              text-white
+              rounded-md
+              disabled:bg-yellowpkc
+            "
+          >
+            Add
+            <Spinner v-if="isSubmitting" />
+          </button>
         </Form>
       </template>
-      <template v-slot:footer>
-        <button
-          form="addSale"
-          class="px-6 py-2 bg-greenpkc text-white rounded-md"
-        >
-          Add
-        </button>
-      </template>
+      <template v-slot:footer> </template>
     </Modal>
+    <Dialog header="Header"></Dialog>
   </div>
 </template>
 
 <script>
 import SaleService from "../services/sale.service";
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import Dialog from "primevue/dialog";
 import Modal from "../components/Modal.vue";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
@@ -80,6 +103,9 @@ import * as yup from "yup";
 export default {
   name: "Sale",
   components: {
+    DataTable,
+    Column,
+    Dialog,
     Modal,
     Form,
     Field,
@@ -89,7 +115,9 @@ export default {
     const schema = yup.object().shape({
       quantity: yup.number().required("Quantity required"),
     });
+
     return {
+      userSales: null,
       showModalAddSale: false,
       content: "",
       schema,
@@ -103,7 +131,7 @@ export default {
   mounted() {
     SaleService.getUserSales().then(
       (response) => {
-        this.content = response.data;
+        this.userSales = response.data;
       },
       (error) => {
         this.content =
@@ -122,10 +150,14 @@ export default {
     closeModalAddSale() {
       this.showModalAddSale = false;
     },
-    handleAddSale(quantity) {
-      console.log(quantity);
+    handleAddSale(quantity, { resetForm }) {
+      this.isLoading = true;
       SaleService.addSale(quantity).then(
-        (res) => console.log(res),
+        (res) => {
+          console.log(res);
+          this.showModalAddSale = false;
+          resetForm();
+        },
         (error) => {
           this.content =
             (error.response &&
@@ -136,6 +168,21 @@ export default {
         }
       );
     },
+    // server() {
+    //   return SaleService.getUserSales().then(
+    //     (response) => {
+    //       return response.data;
+    //     },
+    //     (error) => {
+    //       this.content =
+    //         (error.response &&
+    //           error.response.data &&
+    //           error.response.data.message) ||
+    //         error.message ||
+    //         error.toString();
+    //     }
+    //   );
+    // },
   },
 };
 </script>
