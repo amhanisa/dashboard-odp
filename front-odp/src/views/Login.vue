@@ -12,28 +12,16 @@
       >
       <Field type="password" name="password" class="rounded-md" />
       <ErrorMessage name="username" class="text-red-500 text-sm block" />
-      <button
-        type="submit"
-        class="
-          block
-          w-full
-          bg-greenpkc
-          px-8
-          py-2
-          mt-3
-          rounded-md
-          text-white
-          font-bold
-        "
-      >
+      <Button type="submit" class="p-button-success w-full mt-6">
         Login
-      </button>
+      </Button>
       <p v-if="message">{{ message }}</p>
     </Form>
   </div>
 </template>
 
 <script>
+import Button from "primevue/button";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 
@@ -43,6 +31,7 @@ export default {
     Form,
     Field,
     ErrorMessage,
+    Button,
   },
   data() {
     const schema = yup.object().shape({
