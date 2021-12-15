@@ -3,8 +3,7 @@ const config = require("../config/auth.config");
 const { user: User, sale: Sale } = db;
 
 exports.addSale = (req, res) => {
-  console.log(res.locals.userId);
-  console.log(req.body.quantity);
+  global.socketIo.emit("news", { hello: "world" });
 
   Sale.create({ userId: res.locals.userId, quantity: req.body.quantity })
     .then((user) => {

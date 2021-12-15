@@ -231,6 +231,14 @@ export default {
       });
     },
   },
+  sockets: {
+    connect: function () {
+      console.log("socket connected");
+    },
+    news: function (data) {
+      console.log(data);
+    },
+  },
   beforeUnmount() {
     // prevent memory leak
     clearInterval(this.interval);

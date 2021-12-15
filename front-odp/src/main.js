@@ -7,12 +7,19 @@ import setupInterceptors from "./services/setupInterceptors";
 import PrimeVue from "primevue/config";
 import "primeicons/primeicons.css";
 import ConfirmationService from "primevue/confirmationservice";
+import VueSocketIO from "vue-3-socket.io";
+import SocketIO from "socket.io-client";
 
 setupInterceptors(store);
+const socketOptions = {
+  debug: true,
+  connection: SocketIO("http://localhost:3000"),
+};
 
 createApp(App)
   .use(store)
   .use(router)
+  .use(new VueSocketIO(socketOptions))
   .use(PrimeVue)
   .use(ConfirmationService)
   .mount("#app");
