@@ -42,20 +42,14 @@ exports.getTotalSales = async (req, res) => {
 };
 
 exports.getAllSales = async (req, res) => {
-  let sales = await Sale.findAll({
+  let sales = await Sale.findAndCountAll({
     include: [{ model: User }],
     order: [["createdAt", "DESC"]],
   });
   res.status(200).send(sales);
 };
 
-exports.getSumSales = async (req, res) => {
-  // let sum = await db.sequelize.query(
-  //   `
-  //     SELECT * , sum(quantity) as sum FROM sales group by date(createdAt), ( 4 * HOUR( createdAt ) + FLOOR( MINUTE( createdAt ) / 15 ))
-  //   `,
-  //   { type: db.sequelize.QueryTypes.SELECT }
-  // );
+exports.getCummulativeSales = async (req, res) => {
   let cummulative = await db.sequelize.query(
     `
     SELECT *, SUM(grouped.sum) OVER(ORDER BY createdAt) AS cummulative_sum

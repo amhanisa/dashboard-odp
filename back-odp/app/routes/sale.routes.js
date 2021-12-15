@@ -28,5 +28,5 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.getAllSales
   );
-  app.get("/api/sale/sum", controller.getSumSales);
+  app.get("/api/sale/cummulative", controller.getCummulativeSales);
 };
