@@ -7,3 +7,10 @@
 html {
   background-color: #fafafa;
 }
+
+// FIX BAD BAD BAD
+.p-button-icon-only {
+  .p-button-label {
+    display: none;
+  }
+}

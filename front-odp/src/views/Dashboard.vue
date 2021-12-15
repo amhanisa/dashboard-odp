@@ -1,30 +1,40 @@
 <template>
   <div>
-    <section>Dashboard ODP Pupuk NPK</section>
+    <!-- <section>Dashboard ODP Pupuk NPK</section> -->
     <section>
       <div class="container mx-auto grid grid-cols-4 gap-2 mb-6">
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg">
           <h2 class="font-bold text-gray-300">Waktu Saat Ini</h2>
-          <span class="text-5xl font-medium text-gray-600">{{
-            currentTime
-          }}</span>
+          <span class="text-5xl font-bold">{{ currentTime }}</span>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg">
           <Button
             class="p-button-success"
             label="refresh Data"
             @click="refreshData"
           />
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          <h2>Penjualan Terbanyak</h2>
-          <h3>10000</h3>
-          <span>Kg</span>
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+          <div class="flex justify-center items-center mr-5">
+            <i class="pi pi-book bg-green-400 rounded-lg p-4 text-white"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-gray-300">Total Transaksi</h2>
+            <span class="text-4xl font-bold inline-block">
+              {{ totalTransactions }}
+            </span>
+          </div>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
-          <h2 class="font-bold text-gray-300">Total Penjualan</h2>
-          <h3 class="text-4xl font-medium text-gray-600">{{ totalSales }}</h3>
-          <span class="text-xl font-medium text-gray-500">Kg</span>
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+          <div class="flex justify-center items-center mr-5">
+            <i class="pi pi-dollar bg-green-400 rounded-lg p-4 text-white"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-gray-300">Total Penjualan</h2>
+            <span class="text-4xl font-bold inline-block">
+              {{ formatTotalSales(totalSales) }}
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -88,9 +98,8 @@ export default {
     return {
       totalSales: 0,
       allSales: null,
+      totalTransactions: 0,
       sumSales: [],
-      cummulativeSales: [],
-      graphTime: [],
       interval: null,
       currentTime: null,
     };
@@ -154,15 +163,9 @@ export default {
     },
   },
   mounted() {
+    this.updateTime();
     this.interval = setInterval(() => {
-      // Concise way to format time according to system locale.
-      // In my case this returns "3:48:00 am"
-      this.currentTime = new Date().toLocaleTimeString("en-US", {
-        hour12: false,
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
+      this.updateTime();
     }, 1000);
 
     this.getTotalSales();
@@ -183,7 +186,8 @@ export default {
     },
     getAllSales() {
       SaleService.getAllSales().then((res) => {
-        this.allSales = res.data;
+        this.allSales = res.data.rows;
+        this.totalTransactions = res.data.count;
       });
     },
     getCummulativeSales() {
@@ -209,10 +213,24 @@ export default {
       });
       return formatted;
     },
+    formatTotalSales(value) {
+      return value.toLocaleString("id-ID", {
+        style: "unit",
+        unit: "kilogram",
+      });
+    },
     refreshData() {
       this.getTotalSales();
       this.getAllSales();
       this.getCummulativeSales();
+    },
+    updateTime() {
+      this.currentTime = new Date().toLocaleTimeString("en-US", {
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
     },
   },
   beforeUnmount() {

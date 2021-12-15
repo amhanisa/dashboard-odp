@@ -34,7 +34,7 @@ class SaleService {
   }
 
   getCummulativeSales() {
-    return api.get("sale/sum");
+    return api.get("sale/cummulative");
   }
 }
 
