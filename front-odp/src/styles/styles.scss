@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @import "theme";
+@import "vue-select/src/scss/vue-select.scss";
 
 html {
   background-color: #fafafa;

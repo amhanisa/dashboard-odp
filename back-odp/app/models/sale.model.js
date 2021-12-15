@@ -3,6 +3,9 @@ module.exports = (sequelize, Sequelize) => {
     quantity: {
       type: Sequelize.DOUBLE,
     },
+    editedQuantity: {
+      type: Sequelize.DOUBLE,
+    },
   });
 
   return Sale;

@@ -10,7 +10,7 @@ module.exports = (app) => {
     next();
   });
 
-  app.get("/api/all", controller.allAccess);
+  app.get("/api/user/all", [authJwt.verifyToken], controller.getAllUsers);
 
   app.get("/api/user", [authJwt.verifyToken], controller.userAccess);
 

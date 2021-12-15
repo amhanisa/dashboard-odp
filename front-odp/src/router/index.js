@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
+import Admin from "../views/Admin.vue";
 import tokenService from "../services/token.service";
 
 const checkAccess = (to, from, next) => {
@@ -43,9 +44,10 @@ const routes = [
     beforeEnter: [checkAccess, checkAdmin],
   },
   {
-    path: "/register",
-    name: "Register",
-    component: () => import("../views/Register.vue"),
+    path: "/admin",
+    name: "Admin",
+    component: Admin,
+    beforeEnter: [checkAccess, checkAdmin],
   },
 ];
 

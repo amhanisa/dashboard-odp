@@ -37,6 +37,7 @@ app.get("/", (req, res) => {
 require("./app/routes/auth.routes")(app);
 require("./app/routes/user.routes")(app);
 require("./app/routes/sale.routes")(app);
+require("./app/routes/location.routes")(app);
 
 server.listen(process.env.PORT || 3000, () => {
   console.log(
