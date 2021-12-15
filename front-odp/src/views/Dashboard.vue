@@ -48,7 +48,6 @@
             :data="basicData"
             :options="basicOptions"
           />
-          <LineChart />
         </div>
         <div class="bg-white p-6 rounded-lg shadow-lg">
           <DataTable :value="allSales" :paginator="true" :rows="10" ref="dt">
@@ -167,7 +166,6 @@ export default {
     this.interval = setInterval(() => {
       this.updateTime();
     }, 1000);
-
     this.getTotalSales();
     this.getAllSales();
 
