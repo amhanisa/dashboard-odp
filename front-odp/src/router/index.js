@@ -49,6 +49,11 @@ const routes = [
     component: Admin,
     beforeEnter: [checkAccess, checkAdmin],
   },
+  {
+    path: "/register",
+    name: "Register",
+    component: () => import("../components/Register.vue"),
+  },
 ];
 
 const router = createRouter({

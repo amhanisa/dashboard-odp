@@ -1,29 +1,39 @@
 <template>
   <Form
-    @submit="handleRegister"
+    @submit="handleEditUser"
     :validation-schema="schema"
     :initial-values="user"
+    class="w-96 mx-auto"
   >
     <label for="fullname" class="block font-medium text-gray-700 mt-3"
       >Fullname</label
     >
-    <Field type="text" name="fullname" class="rounded-md" />
+    <Field type="text" name="fullname" class="rounded-md w-full" />
     <ErrorMessage name="fullname" />
     <label for="username" class="block font-medium text-gray-700 mt-3"
       >Username</label
     >
-    <Field type="text" name="username" class="rounded-md" />
+    <Field type="text" name="username" class="rounded-md w-full" />
     <ErrorMessage name="username" class="text-red-500 text-sm block" />
     <label for="password" class="block font-medium text-gray-700 mt-3"
       >Password</label
     >
-    <Field type="password" name="password" class="rounded-md" />
+    <Field type="password" name="password" class="rounded-md w-full" />
     <ErrorMessage name="password" class="text-red-500 text-sm block" />
 
     <label for="password" class="block font-medium text-gray-700 mt-3"
       >Location</label
     >
-    <vSelect v-model="selectedCars" :options="options" class="block" />
+    <vSelect
+      v-model="selectedLocations"
+      label="name"
+      :options="locations"
+      :multiple="true"
+      :searchable="true"
+      :filterable="true"
+      :close-on-select="false"
+      class="block w-full rounded-md"
+    />
 
     <p v-if="message">{{ message }}</p>
 
@@ -35,6 +45,7 @@
 <script>
 import vSelect from "vue-select";
 import LocationService from "../services/location.service";
+import UserService from "../services/user.service";
 import Button from "primevue/button";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
@@ -62,7 +73,6 @@ export default {
         .max(20, "Must be maximum 20 characters"),
       password: yup
         .string()
-        .required("Password is required")
         .min(6, "Must be at leat 6 characters")
         .max(40, "Must be maximum 40 characters"),
     });
@@ -72,18 +82,6 @@ export default {
       selectedLocations: [],
       value: null,
       options: ["Batman", "Robin", "Joker"],
-      selectedCars: null,
-      cars: [
-        { brand: "Audi", value: "Audi" },
-        { brand: "BMW", value: "BMW" },
-        { brand: "Fiat", value: "Fiat" },
-        { brand: "Honda", value: "Honda" },
-        { brand: "Jaguar", value: "Jaguar" },
-        { brand: "Mercedes", value: "Mercedes" },
-        { brand: "Renault", value: "Renault" },
-        { brand: "Volkswagen", value: "Volkswagen" },
-        { brand: "Volvo", value: "Volvo" },
-      ],
       message: "",
       schema,
     };
@@ -97,11 +95,14 @@ export default {
         (res) => (this.locations = res.data)
       );
     },
-    handleRegister(user) {
-      this.message = "";
-      this.loading = true;
+    handleEditUser(user) {
+      console.log(user);
+      console.log(this.selectedLocations);
 
-      this.$store.dispatch("auth/register", user).then(
+      UserService.editUser({
+        user: user,
+        selectedLocations: this.selectedLocations,
+      }).then(
         (data) => {
           this.message = data.message;
           this.loading = false;

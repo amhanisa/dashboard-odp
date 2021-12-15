@@ -90,7 +90,11 @@
       <Register />
     </Dialog>
 
-    <Dialog header="Edit User" v-model:visible="showModalEditUser">
+    <Dialog
+      header="Edit User"
+      v-model:visible="showModalEditUser"
+      :maximizable="true"
+    >
       <EditUser :user="selectedUser" />
     </Dialog>
 

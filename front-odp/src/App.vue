@@ -4,6 +4,7 @@
     <router-link to="/sale">Sale</router-link> |
     <router-link to="/dashboard">Dashboard</router-link> |
     <router-link to="/admin">Admin</router-link> |
+    <router-link to="/register">Register</router-link> |
     <router-link to="/login">Login</router-link> |
     <button @click="logout">Logout</button>
   </div>
