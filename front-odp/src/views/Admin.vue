@@ -185,7 +185,6 @@
   </div>
 </template>
 <script>
-import UserService from "../services/user.service";
 import LocationService from "../services/location.service";
 import { mapGetters } from "vuex";
 import DataTable from "primevue/datatable";
@@ -217,7 +216,6 @@ export default {
       name: yup.string().required("Name required"),
     });
     return {
-      users: [],
       showModalAddUser: false,
       showModalEditUser: false,
       showModalAddLocation: false,
@@ -229,14 +227,14 @@ export default {
   },
   mounted() {
     this.getAllUsers();
-    this.$store.dispatch("refreshLocations");
+    this.getAllLocations();
   },
   computed: {
-    ...mapGetters(["locations"]),
+    ...mapGetters(["users", "locations"]),
   },
   methods: {
     getAllUsers() {
-      UserService.getAllUsers().then((res) => (this.users = res.data));
+      this.$store.dispatch("refreshUsers");
     },
     getAllLocations() {
       this.$store.dispatch("refreshLocations");

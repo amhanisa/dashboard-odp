@@ -1,5 +1,7 @@
 const db = require("../models");
 const { user: User, location: Location } = db;
+const bcrypt = require("bcryptjs");
+const res = require("express/lib/response");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -13,8 +15,24 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.getUser = async (req, res) => {
+  try {
+    const userId = res.locals.userId;
+
+    const user = await User.scope("withoutPassword").findOne({
+      where: { id: userId },
+      include: [{ model: Location }],
+    });
+
+    return res.status(200).send(user);
+  } catch (err) {
+    (err) => res.status(500).send({ message: err.message });
+  }
+};
+
 exports.editUser = async (req, res) => {
   console.log(req.body);
+  console.log("IEU YEUH");
   const userValue = req.body.user;
   const locations = req.body.selectedLocations.map((item) => item.id);
   try {
@@ -33,11 +51,4 @@ exports.editUser = async (req, res) => {
   } catch (err) {
     (err) => res.status(500).send({ message: err.message });
   }
-};
-
-exports.adminAccess = (req, res) => {
-  res.status(200).send("Admin Content");
-};
-exports.userAccess = (req, res) => {
-  res.status(200).send("User Content");
 };

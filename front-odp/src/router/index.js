@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Dashboard from "../views/Dashboard.vue";
 import Admin from "../views/Admin.vue";
+import MasterStock from "../components/MasterStock.vue";
 import tokenService from "../services/token.service";
 
 const checkAccess = (to, from, next) => {
@@ -47,6 +48,12 @@ const routes = [
     path: "/admin",
     name: "Admin",
     component: Admin,
+    beforeEnter: [checkAccess, checkAdmin],
+  },
+  {
+    path: "/masterstock",
+    name: "Masterstock",
+    component: MasterStock,
     beforeEnter: [checkAccess, checkAdmin],
   },
   {

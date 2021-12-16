@@ -9,7 +9,7 @@ const locations = {
       return LocationService.getAllLocations().then(
         (res) => {
           commit("registerLocations", res.data);
-          return Promise.resolve(locations);
+          return Promise.resolve(res.data);
         },
         (error) => {
           return Promise.reject(error);

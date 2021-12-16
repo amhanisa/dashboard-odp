@@ -1,10 +1,11 @@
 import api from "./api";
 
 class SaleService {
-  addSale({ quantity }) {
+  addSale({ quantity, selectedLocation }) {
     return api
       .post("sale/add", {
         quantity,
+        selectedLocation,
       })
       .then((res) => {
         console.log(res);
@@ -25,6 +26,11 @@ class SaleService {
       });
   }
 
+  updateSaleValue(sale) {
+    console.log(sale);
+    return api.post("sale/updateValue", { sale });
+  }
+
   getTotalSales() {
     return api.get("sale/total");
   }
@@ -33,8 +39,14 @@ class SaleService {
     return api.get("sale/all");
   }
 
-  getCummulativeSales() {
-    return api.get("sale/cummulative");
+  // FOR DASHBOARD
+
+  getAllSalesForDashboard() {
+    return api.get("dashboard/allSales");
+  }
+
+  getCummulativeSalesForDashboard() {
+    return api.get("dashboard/cummulative");
   }
 }
 

@@ -17,6 +17,11 @@ module.exports = (app) => {
     [authJwt.verifyToken],
     controller.deleteUserSale
   );
+  app.post(
+    "/api/sale/updateValue",
+    [authJwt.verifyToken],
+    controller.updateSaleValue
+  );
 
   app.get(
     "/api/sale/total",
@@ -28,5 +33,11 @@ module.exports = (app) => {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.getAllSales
   );
-  app.get("/api/sale/cummulative", controller.getCummulativeSales);
+
+  //FOR DASHBOARD
+  app.get(
+    "/api/dashboard/cummulative",
+    controller.getCummulativeSalesForDashboard
+  );
+  app.get("/api/dashboard/allSales", controller.getAllSalesForDashboard);
 };

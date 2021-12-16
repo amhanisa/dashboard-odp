@@ -5,6 +5,11 @@ module.exports = (sequelize, Sequelize) => {
     },
     editedQuantity: {
       type: Sequelize.DOUBLE,
+      defaultValue: 0,
+    },
+    status: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
     },
   });
 

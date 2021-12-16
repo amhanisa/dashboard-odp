@@ -3,11 +3,16 @@
     <!-- <section>Dashboard ODP Pupuk NPK</section> -->
     <section>
       <div class="container mx-auto grid grid-cols-4 gap-2 mb-6">
-        <div class="bg-white px-6 py-3 rounded-lg shadow-lg">
-          <h2 class="font-bold text-gray-300">Waktu Saat Ini</h2>
-          <span class="text-5xl font-bold">{{ currentTime }}</span>
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center">
+          <div class="flex justify-center items-center mr-5">
+            <i class="pi pi-clock bg-green-400 rounded-lg p-4 text-white"></i>
+          </div>
+          <div>
+            <h2 class="font-bold text-gray-300">Waktu Saat Ini</h2>
+            <span class="text-5xl font-bold">{{ currentTime }}</span>
+          </div>
         </div>
-        <div class="bg-white px-6 py-3 rounded-lg shadow-lg">
+        <div class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center">
           <Button
             class="p-button-success"
             label="refresh Data"
@@ -27,12 +32,12 @@
         </div>
         <div class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center">
           <div class="flex justify-center items-center mr-5">
-            <i class="pi pi-dollar bg-green-400 rounded-lg p-4 text-white"></i>
+            <i class="pi pi-box bg-green-400 rounded-lg p-4 text-white"></i>
           </div>
           <div>
             <h2 class="font-bold text-gray-300">Total Penjualan</h2>
             <span class="text-4xl font-bold inline-block">
-              {{ formatTotalSales(totalSales) }}
+              {{ formatKilogram(totalSales) }}
             </span>
           </div>
         </div>
@@ -61,14 +66,17 @@
                 {{ formatDate(slotProps.data.createdAt) }}
               </template>
             </Column>
-            <Column field="user.fullname" header="Perusahaan" :sortable="true">
+            <Column field="location.name" header="Lokasi" :sortable="true">
             </Column>
             <Column
-              field="quantity"
+              field="editedQuantity"
               header="Jumlah"
               :sortable="true"
               filterField="quantity"
             >
+              <template #body="slotProps">
+                {{ formatKilogram(slotProps.data.editedQuantity) }}
+              </template>
             </Column>
             <template #empty> Belum ada penjualan. </template>
           </DataTable>
@@ -84,6 +92,8 @@ import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import Button from "primevue/button";
 import Chart from "primevue/chart";
+import { useToast } from "vue-toastification";
+import CustomToast from "../components/CustomToast.vue";
 
 export default {
   name: "Dashboard",
@@ -98,7 +108,6 @@ export default {
       totalSales: 0,
       allSales: null,
       totalTransactions: 0,
-      sumSales: [],
       interval: null,
       currentTime: null,
     };
@@ -151,22 +160,19 @@ export default {
       },
     };
 
+    const toast = useToast();
+
     return {
       basicData,
       basicOptions,
+      toast,
     };
-  },
-  computed: {
-    currentUser() {
-      return this.$store.state.auth.user;
-    },
   },
   mounted() {
     this.updateTime();
     this.interval = setInterval(() => {
       this.updateTime();
     }, 1000);
-    this.getTotalSales();
     this.getAllSales();
 
     //BAD BAD BAD
@@ -175,21 +181,16 @@ export default {
     }, 1000);
   },
   methods: {
-    getTotalSales() {
-      SaleService.getTotalSales()
-        .then((res) => {
-          this.totalSales = res.data.total;
-        })
-        .catch((err) => console.log(err));
-    },
     getAllSales() {
-      SaleService.getAllSales().then((res) => {
+      SaleService.getAllSalesForDashboard().then((res) => {
+        console.log(res);
         this.allSales = res.data.rows;
+        this.totalSales = res.data.sum;
         this.totalTransactions = res.data.count;
       });
     },
     getCummulativeSales() {
-      SaleService.getCummulativeSales().then((res) => {
+      SaleService.getCummulativeSalesForDashboard().then((res) => {
         let chart = this.$refs.primeChart.chart;
 
         chart.data.datasets[0].data = res.data.map(({ sum }) => sum);
@@ -211,16 +212,23 @@ export default {
       });
       return formatted;
     },
-    formatTotalSales(value) {
+    formatKilogram(value) {
       return value.toLocaleString("id-ID", {
         style: "unit",
         unit: "kilogram",
       });
     },
     refreshData() {
-      this.getTotalSales();
       this.getAllSales();
       this.getCummulativeSales();
+
+      this.toast({
+        component: CustomToast,
+        props: {
+          quantity: 1000,
+          location: "Kios 3333",
+        },
+      });
     },
     updateTime() {
       this.currentTime = new Date().toLocaleTimeString("en-US", {
@@ -235,8 +243,19 @@ export default {
     connect: function () {
       console.log("socket connected");
     },
-    news: function (data) {
+    sale: function (data) {
       console.log(data);
+
+      this.getAllSales();
+      this.getCummulativeSales();
+
+      this.toast({
+        component: CustomToast,
+        props: {
+          quantity: data.editedQuantity,
+          location: data.location.name,
+        },
+      });
     },
   },
   beforeUnmount() {

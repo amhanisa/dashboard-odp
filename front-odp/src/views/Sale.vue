@@ -24,13 +24,6 @@
                 class="p-button-success p-mr-2 mr-3"
                 @click="openModalAddSale"
               />
-              <Button
-                label="Delete (Blum Bisa)"
-                icon="pi pi-trash"
-                class="p-button-danger"
-              />
-              <!-- @click="confirmDeleteSelected"
-                :disabled="!selectedProducts || !selectedProducts.length" -->
             </template>
 
             <template #end>
@@ -60,6 +53,8 @@
                 {{ formatDate(slotProps.data.createdAt) }}
               </template>
             </Column>
+            <Column field="location.name" header="Lokasi" :sortable="true">
+            </Column>
             <Column
               field="quantity"
               header="Jumlah"
@@ -69,11 +64,11 @@
             </Column>
             <Column :exportable="false" style="min-width: 8rem">
               <template #body="slotProps">
-                <Button
+                <!-- <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="editSale(slotProps.data)"
-                />
+                /> -->
                 <Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
@@ -112,18 +107,28 @@
             <span class="text-gray-500 sm:text-sm"> KG </span>
           </div>
           <Field type="number" name="quantity" class="pr-10 rounded-md" />
+        </div>
+        <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
+
+        <Field name="location" v-model="selectedLocation" hidden></Field>
+
+        <div>
+          <label
+            for="quantity"
+            class="block text-sm font-medium text-gray-700 mt-3"
+          >
+            Location
+          </label>
           <vSelect
-            v-model="selectedLocations"
+            v-model="selectedLocation"
             label="name"
-            :options="locations"
-            :multiple="true"
+            :options="currentUserLocations"
             :searchable="true"
             :filterable="true"
-            :close-on-select="false"
             class="block w-full rounded-md"
           />
         </div>
-        <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
+        <ErrorMessage name="location" class="text-red-500 text-sm block" />
 
         <Button
           :disabled="isSubmitting"
@@ -158,6 +163,7 @@ import vSelect from "vue-select";
 import { FilterMatchMode } from "primevue/api";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
+import { mapGetters } from "vuex";
 
 export default {
   name: "Sale",
@@ -176,12 +182,17 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      quantity: yup.number().required("Quantity required"),
+      quantity: yup.number().required("Mohon isi jumlah"),
+      location: yup
+        .object("")
+        .required("Location required")
+        .typeError("Mohon isi lokasi"),
     });
 
     return {
       userSales: null,
       showModalAddSale: false,
+      selectedLocation: null,
       content: "",
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -191,9 +202,12 @@ export default {
     };
   },
   computed: {
+    ...mapGetters(["currentUserLocations"]),
+
     currentUser() {
       return this.$store.state.auth.user;
     },
+
     totalUserSales() {
       let total = 0;
       if (this.userSales !== null) {
@@ -205,12 +219,17 @@ export default {
     },
   },
   mounted() {
+    this.getCurrentUserLocation();
     this.getUserSales();
   },
   methods: {
+    getCurrentUserLocation() {
+      this.$store.dispatch("refreshCurrentUserLocations");
+    },
     getUserSales() {
       SaleService.getUserSales().then(
         (response) => {
+          console.log(response.data);
           this.userSales = response.data;
         },
         (error) => {
@@ -229,12 +248,14 @@ export default {
     closeModalAddSale() {
       this.showModalAddSale = false;
     },
-    handleAddSale(quantity, { resetForm }) {
-      this.isLoading = true;
-      SaleService.addSale(quantity).then(
-        (res) => {
-          console.log(res);
+    handleAddSale(formValue, { resetForm }) {
+      SaleService.addSale({
+        quantity: formValue.quantity,
+        selectedLocation: this.selectedLocation,
+      }).then(
+        () => {
           this.showModalAddSale = false;
+          this.selectedLocation = null;
           resetForm();
           this.getUserSales();
         },
@@ -260,9 +281,6 @@ export default {
         minute: "2-digit",
       });
       return formatted;
-    },
-    editSale(data) {
-      console.log(data);
     },
     confirmDeleteSale(data) {
       console.log(data);

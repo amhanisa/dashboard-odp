@@ -45,7 +45,6 @@
 <script>
 import { mapGetters } from "vuex";
 import vSelect from "vue-select";
-import LocationService from "../services/location.service";
 import UserService from "../services/user.service";
 import Button from "primevue/button";
 import { Form, Field, ErrorMessage } from "vee-validate";
@@ -79,23 +78,17 @@ export default {
     });
     return {
       selectedLocations: [],
-      value: null,
       message: "",
       schema,
     };
   },
   mounted() {
-    this.getAllLocations();
+    this.selectedLocations = this.user.locations || [];
   },
   computed: {
     ...mapGetters(["locations"]),
   },
   methods: {
-    getAllLocations() {
-      LocationService.getAllLocations().then(
-        (res) => (this.locations = res.data)
-      );
-    },
     handleEditUser(user) {
       console.log(user);
       console.log(this.selectedLocations);
@@ -106,7 +99,7 @@ export default {
       }).then(
         (data) => {
           this.message = data.message;
-          this.loading = false;
+          this.$store.dispatch("refreshUsers");
         },
         (error) => {
           this.message =
@@ -114,7 +107,6 @@ export default {
               error.response.data & error.response.data.message) ||
             error.message ||
             error.toString();
-          this.loading = false;
         }
       );
     },

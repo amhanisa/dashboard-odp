@@ -54,7 +54,6 @@ export default {
         .max(40, "Must be maximum 40 characters"),
     });
     return {
-      loading: false,
       message: "",
       schema,
     };
@@ -62,12 +61,11 @@ export default {
   methods: {
     handleRegister(user) {
       this.message = "";
-      this.loading = true;
 
       this.$store.dispatch("auth/register", user).then(
         (data) => {
           this.message = data.message;
-          this.loading = false;
+          this.$store.dispatch("refreshUsers");
         },
         (error) => {
           this.message =
@@ -75,7 +73,6 @@ export default {
               error.response.data & error.response.data.message) ||
             error.message ||
             error.toString();
-          this.loading = false;
         }
       );
     },
