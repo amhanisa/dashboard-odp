@@ -34,6 +34,12 @@ module.exports = (app) => {
     controller.getAllSales
   );
 
+  app.post(
+    "/api/sale/addSaleFromAdmin",
+    [authJwt.verifyToken],
+    controller.addSaleFromAdmin
+  );
+
   //FOR DASHBOARD
   app.get(
     "/api/dashboard/cummulative",

@@ -38,14 +38,11 @@
           <DataTable :value="userSales" :paginator="true" :rows="10" ref="dt">
             <template #header>
               <div class="table-header flex flex-column justify-between">
-                <h5 class="font-bold text-xl">Manage Products</h5>
-                <span class="p-input-icon-left">
-                  <i class="pi pi-search" />
-                  <InputText
-                    v-model="filters['global'].value"
-                    placeholder="Keyword Search"
-                  />
-                </span>
+                <h5 class="font-bold text-xl">Manage Sale</h5>
+                <InputText
+                  v-model="filters['global'].value"
+                  placeholder="Keyword Search"
+                />
               </div>
             </template>
             <Column field="createdAt" header="Waktu" :sortable="true">

@@ -173,9 +173,55 @@
           <Field type="number" name="quantity" class="pr-10 rounded-md" />
         </div>
         <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
+        <label
+          for="editedQuantity"
+          class="block text-sm font-medium text-gray-700 mt-3"
+        >
+          Quantity Updated
+        </label>
+        <div class="relative">
+          <div
+            class="
+              absolute
+              h-full
+              right-0
+              pr-3
+              flex
+              items-center
+              pointer-events-none
+            "
+          >
+            <span class="text-gray-500 sm:text-sm"> KG </span>
+          </div>
+          <Field type="number" name="editedQuantity" class="pr-10 rounded-md" />
+        </div>
+        <ErrorMessage
+          name="editedQuantity"
+          class="text-red-500 text-sm block"
+        />
 
-        <Field name="location" v-model="selectedLocation" hidden></Field>
+        <Divider />
 
+        <Field name="user" v-model="newSale.user" hidden></Field>
+        <div>
+          <label
+            for="user"
+            class="block text-sm font-medium text-gray-700 mt-3"
+          >
+            User
+          </label>
+          <vSelect
+            v-model="newSale.user"
+            label="fullname"
+            :options="users"
+            :searchable="true"
+            :filterable="true"
+            class="block w-full rounded-md"
+          />
+        </div>
+        <ErrorMessage name="user" class="text-red-500 text-sm block" />
+
+        <Field name="location" v-model="newSale.location" hidden></Field>
         <div>
           <label
             for="quantity"
@@ -184,9 +230,9 @@
             Location
           </label>
           <vSelect
-            v-model="selectedLocation"
+            v-model="newSale.location"
             label="name"
-            :options="currentUserLocations"
+            :options="locations"
             :searchable="true"
             :filterable="true"
             class="block w-full rounded-md"
@@ -345,6 +391,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import { mapGetters } from "vuex";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "Sale",
@@ -361,6 +408,11 @@ export default {
     Form,
     Field,
     ErrorMessage,
+  },
+  setup() {
+    const toast = useToast();
+
+    return { toast };
   },
   data() {
     const schema = yup.object().shape({
@@ -381,6 +433,7 @@ export default {
       showModalAddSale: false,
       showModalEditSale: false,
       selectedSale: null,
+      newSale: { user: null, location: null },
       content: "",
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -432,15 +485,19 @@ export default {
       this.showModalAddSale = false;
     },
     handleAddSale(formValue, { resetForm }) {
-      SaleService.addSale({
+      console.log(formValue);
+      SaleService.addSaleFromAdmin({
         quantity: formValue.quantity,
-        selectedLocation: this.selectedLocation,
+        editedQuantity: formValue.editedQuantity,
+        location: this.newSale.location,
+        user: this.newSale.user,
       }).then(
         () => {
           this.showModalAddSale = false;
-          this.selectedLocation = null;
+          this.newSale.location = null;
+          this.newSale.user = null;
           resetForm();
-          this.getUserSales();
+          this.getAllSales();
         },
         (error) => {
           this.content =
@@ -527,6 +584,18 @@ export default {
     },
     exportCSV() {
       this.$refs.dt.exportCSV();
+    },
+  },
+  sockets: {
+    connect: function () {
+      console.log("socket connected");
+    },
+    newSale: function (data) {
+      console.log(data);
+
+      this.getAllSales();
+
+      this.toast("Wuuhuuu");
     },
   },
 };

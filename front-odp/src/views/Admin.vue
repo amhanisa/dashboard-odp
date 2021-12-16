@@ -8,9 +8,6 @@
               <div class="table-header flex flex-column justify-between">
                 <h5 class="font-bold text-xl">Daftar User</h5>
                 <div>
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
-                  </span>
                   <Button
                     @click="openModalAddUser"
                     class="p-button-primary"
@@ -54,9 +51,6 @@
               <div class="table-header flex flex-column justify-between">
                 <h5 class="font-bold text-xl">Daftar Lokasi</h5>
                 <div>
-                  <span class="p-input-icon-left">
-                    <i class="pi pi-search" />
-                  </span>
                   <Button
                     @click="openModalAddLocation"
                     class="p-button-primary"

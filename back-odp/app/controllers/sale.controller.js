@@ -3,17 +3,18 @@ const config = require("../config/auth.config");
 const { user: User, sale: Sale, location: Location } = db;
 
 exports.addSale = (req, res) => {
-  // global.socketIo.emit("news", { hello: "world" });
-  console.log(req.body);
-  Sale.create({
-    userId: res.locals.userId,
-    quantity: req.body.quantity,
-    locationId: req.body.selectedLocation.id,
-  })
-    .then((user) => {
-      res.send({ message: "Sale created" });
-    })
-    .catch((err) => res.status(500).send({ message: err.message }));
+  try {
+    Sale.create({
+      userId: res.locals.userId,
+      quantity: req.body.quantity,
+      locationId: req.body.selectedLocation.id,
+    });
+
+    global.socketIo.emit("newSale", "Wuhuuu");
+    res.send({ message: "Sale created" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
 };
 
 exports.getUserSales = async (req, res) => {
@@ -57,6 +58,29 @@ exports.updateSaleValue = async (req, res) => {
     sale.status = true;
     await sale.save();
     res.status(200).send("Updated");
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+exports.addSaleFromAdmin = async (req, res) => {
+  try {
+    const sale = await Sale.create({
+      userId: req.body.user.id,
+      locationId: req.body.location.id,
+      quantity: req.body.quantity,
+      editedQuantity: req.body.editedQuantity,
+      status: true,
+    });
+
+    const newSale = await Sale.findOne({
+      where: { id: sale.id },
+      include: [{ model: Location }],
+    });
+
+    global.socketIo.emit("sale", newSale);
+
+    res.status(200).send(sale);
   } catch (err) {
     res.status(500).send({ message: err.message });
   }

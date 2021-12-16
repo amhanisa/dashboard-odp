@@ -39,6 +39,10 @@ class SaleService {
     return api.get("sale/all");
   }
 
+  addSaleFromAdmin(sale) {
+    return api.post("sale/addSaleFromAdmin", sale);
+  }
+
   // FOR DASHBOARD
 
   getAllSalesForDashboard() {
