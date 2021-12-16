@@ -187,6 +187,7 @@
 <script>
 import UserService from "../services/user.service";
 import LocationService from "../services/location.service";
+import { mapGetters } from "vuex";
 import DataTable from "primevue/datatable";
 import Column from "primevue/column";
 import ConfirmDialog from "primevue/confirmdialog";
@@ -216,7 +217,6 @@ export default {
       name: yup.string().required("Name required"),
     });
     return {
-      locations: [],
       users: [],
       showModalAddUser: false,
       showModalEditUser: false,
@@ -229,16 +229,17 @@ export default {
   },
   mounted() {
     this.getAllUsers();
-    this.getAllLocations();
+    this.$store.dispatch("refreshLocations");
+  },
+  computed: {
+    ...mapGetters(["locations"]),
   },
   methods: {
     getAllUsers() {
       UserService.getAllUsers().then((res) => (this.users = res.data));
     },
     getAllLocations() {
-      LocationService.getAllLocations().then(
-        (res) => (this.locations = res.data)
-      );
+      this.$store.dispatch("refreshLocations");
     },
     openModalAddUser() {
       this.showModalAddUser = true;

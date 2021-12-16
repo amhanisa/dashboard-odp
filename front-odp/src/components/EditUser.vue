@@ -43,6 +43,7 @@
   </Form>
 </template>
 <script>
+import { mapGetters } from "vuex";
 import vSelect from "vue-select";
 import LocationService from "../services/location.service";
 import UserService from "../services/user.service";
@@ -77,17 +78,17 @@ export default {
         .max(40, "Must be maximum 40 characters"),
     });
     return {
-      loading: false,
-      locations: [],
       selectedLocations: [],
       value: null,
-      options: ["Batman", "Robin", "Joker"],
       message: "",
       schema,
     };
   },
   mounted() {
     this.getAllLocations();
+  },
+  computed: {
+    ...mapGetters(["locations"]),
   },
   methods: {
     getAllLocations() {

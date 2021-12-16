@@ -112,6 +112,16 @@
             <span class="text-gray-500 sm:text-sm"> KG </span>
           </div>
           <Field type="number" name="quantity" class="pr-10 rounded-md" />
+          <vSelect
+            v-model="selectedLocations"
+            label="name"
+            :options="locations"
+            :multiple="true"
+            :searchable="true"
+            :filterable="true"
+            :close-on-select="false"
+            class="block w-full rounded-md"
+          />
         </div>
         <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
 
@@ -144,6 +154,7 @@ import ConfirmDialog from "primevue/confirmdialog";
 import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import InputText from "primevue/inputtext";
+import vSelect from "vue-select";
 import { FilterMatchMode } from "primevue/api";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
@@ -158,6 +169,7 @@ export default {
     Button,
     Toolbar,
     InputText,
+    vSelect,
     Form,
     Field,
     ErrorMessage,
