@@ -52,6 +52,10 @@ class SaleService {
   getCummulativeSalesForDashboard() {
     return api.get("dashboard/cummulative");
   }
+
+  getSalesRanking() {
+    return api.get("dashboard/salesRanking");
+  }
 }
 
 export default new SaleService();

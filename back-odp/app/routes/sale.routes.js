@@ -46,4 +46,5 @@ module.exports = (app) => {
     controller.getCummulativeSalesForDashboard
   );
   app.get("/api/dashboard/allSales", controller.getAllSalesForDashboard);
+  app.get("/api/dashboard/salesRanking", controller.getSalesRanking);
 };

@@ -136,3 +136,23 @@ exports.getCummulativeSalesForDashboard = async (req, res) => {
 
   res.status(200).send(cummulative);
 };
+
+exports.getSalesRanking = async (req, res) => {
+  try {
+    let rank = await db.sequelize.query(
+      `
+      SELECT *, sum(editedQuantity) as sum
+      FROM sales
+      JOIN locations ON sales.locationId = locations.id
+      WHERE status=1
+      GROUP BY locationId
+      ORDER BY sum DESC LIMIT 3
+    `,
+      { type: db.sequelize.QueryTypes.SELECT }
+    );
+
+    res.status(200).send(rank);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};

@@ -54,7 +54,8 @@
             :options="basicOptions"
           />
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-lg">
+
+        <div class="bg-white p-6 rounded-lg shadow-lg row-span-2">
           <DataTable :value="allSales" :paginator="true" :rows="10" ref="dt">
             <template #header>
               <div class="table-header flex flex-column justify-between">
@@ -80,6 +81,42 @@
             </Column>
             <template #empty> Belum ada penjualan. </template>
           </DataTable>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg col-span-2">
+          <h2 class="text-2xl font-bold mb-6">Penjualan Terbanyak</h2>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div
+              class="flex justify-center items-center"
+              v-for="(item, index) in salesRanking"
+              v-bind:key="item.locationId"
+            >
+              <i
+                class="pi pi-star bg-yellow-500 rounded-lg p-4 text-white mr-3"
+                v-if="index === 0"
+              >
+              </i>
+              <i
+                class="pi pi-star bg-gray-400 rounded-lg p-4 text-white mr-3"
+                v-if="index === 1"
+              >
+              </i>
+              <i
+                class="pi pi-star bg-yellow-900 rounded-lg p-4 text-white mr-3"
+                v-if="index === 2"
+              >
+              </i>
+              <div>
+                <span class="block font-bold text-xl">
+                  {{ item.name || null }}
+                </span>
+                <span class="text-xl">
+                  {{ formatKilogram(item.sum) || null }}
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -108,6 +145,7 @@ export default {
       totalSales: 0,
       allSales: null,
       totalTransactions: 0,
+      salesRanking: [],
       interval: null,
       currentTime: null,
     };
@@ -120,14 +158,16 @@ export default {
           label: "Jumlah",
           data: [],
           fill: false,
-          borderColor: "#42A5F5",
+          borderColor: "#0284c7",
+          borderWidth: 8,
           tension: 0.4,
         },
         {
           label: "Jumlah Kumulatif",
           data: [],
           fill: false,
-          borderColor: "#42A5F5",
+          borderColor: "#e11d48",
+          borderWidth: 8,
           tension: 0.4,
         },
       ],
@@ -174,6 +214,7 @@ export default {
       this.updateTime();
     }, 1000);
     this.getAllSales();
+    this.getSalesRanking();
 
     //BAD BAD BAD
     setTimeout(() => {
@@ -183,7 +224,6 @@ export default {
   methods: {
     getAllSales() {
       SaleService.getAllSalesForDashboard().then((res) => {
-        console.log(res);
         this.allSales = res.data.rows;
         this.totalSales = res.data.sum;
         this.totalTransactions = res.data.count;
@@ -201,6 +241,11 @@ export default {
           this.formatDate(createdAt)
         );
         chart.update();
+      });
+    },
+    getSalesRanking() {
+      SaleService.getSalesRanking().then((res) => {
+        this.salesRanking = res.data;
       });
     },
     formatDate(value) {
@@ -223,14 +268,6 @@ export default {
     refreshData() {
       this.getAllSales();
       this.getCummulativeSales();
-
-      this.toast({
-        component: CustomToast,
-        props: {
-          quantity: 1000,
-          location: "Kios 3333",
-        },
-      });
     },
     updateTime() {
       this.currentTime = new Date().toLocaleTimeString("en-US", {
@@ -246,8 +283,6 @@ export default {
       console.log("socket connected");
     },
     sale: function (data) {
-      console.log(data);
-
       this.getAllSales();
       this.getCummulativeSales();
 
