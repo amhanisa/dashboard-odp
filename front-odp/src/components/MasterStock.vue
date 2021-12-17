@@ -416,8 +416,8 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      quantity: yup.number().required("Mohon isi jumlah"),
-      editedQuantity: yup.number().required("Mohon isi jumlah"),
+      quantity: yup.number().required("Mohon isi jumlah").min(1),
+      editedQuantity: yup.number().required("Mohon isi jumlah").min(1),
       user: yup
         .object("")
         .required("Mohon isi user")
@@ -572,7 +572,7 @@ export default {
           SaleService.deleteUserSale(data)
             .then((res) => {
               console.log(res);
-              this.getUserSales();
+              this.getAllSales();
             })
             .catch(() => {
               alert("error");
