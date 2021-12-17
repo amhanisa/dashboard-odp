@@ -11,11 +11,12 @@ import VueSocketIO from "vue-3-socket.io";
 import SocketIO from "socket.io-client";
 import Toast, { POSITION } from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import CONFIG from "./config/index";
 
 setupInterceptors(store);
 const socketOptions = {
   debug: true,
-  connection: SocketIO("http://localhost:3000"),
+  connection: SocketIO(CONFIG.WS_URL),
 };
 
 createApp(App)

@@ -27,9 +27,6 @@ export default {
       this.$router.push("login");
     },
   },
-  mounted() {
-    console.log(this.$store.state.auth.user.role);
-  },
   computed: {
     isAdmin() {
       if (!this.$store.state.auth.user) {

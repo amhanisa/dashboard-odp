@@ -118,20 +118,20 @@
                 {{ formatKilogram(slotProps.data.quantity) }}
               </template>
             </Column>
-            <Column :exportable="false" style="min-width: 8rem">
+            <!-- <Column :exportable="false" style="min-width: 8rem">
               <template #body="slotProps">
-                <!-- <Button
+                <Button
                   icon="pi pi-pencil"
                   class="p-button-rounded p-button-success mr-2"
                   @click="editSale(slotProps.data)"
-                /> -->
+                />
                 <Button
                   icon="pi pi-trash"
                   class="p-button-rounded p-button-danger"
                   @click="confirmDeleteSale(slotProps.data)"
                 />
               </template>
-            </Column>
+            </Column> -->
             <template #empty> Belum ada penjualan. </template>
           </DataTable>
         </div>

@@ -37,7 +37,7 @@
           <div>
             <h2 class="font-bold text-gray-300">Total Penjualan</h2>
             <span class="text-4xl font-bold inline-block">
-              {{ formatKilogram(totalSales) }}
+              {{ formatKilogram(totalSales || 0) }}
             </span>
           </div>
         </div>
