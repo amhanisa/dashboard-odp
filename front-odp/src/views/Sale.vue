@@ -13,31 +13,32 @@
               gap-2
               mb-6
               p-6
+              md:p-0
             "
           >
-            <div class="sm:col-span-2 flex items-center">
-              <span class="text-4xl font-bold"
-                >Hi, {{ currentUser.fullname }}!</span
-              >
-            </div>
-
-            <div
-              class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center"
-            >
-              <div class="flex justify-center items-center mr-5">
-                <i
-                  class="pi pi-book bg-green-400 rounded-lg p-4 text-white"
-                ></i>
-              </div>
-              <div>
-                <h2 class="font-bold text-gray-300">Total Transaksi</h2>
-                <span class="text-4xl font-bold inline-block">
-                  {{ totalTransactions }}
-                </span>
-              </div>
+            <div class="sm:col-span-2 lg:col-span-3">
+              <span class="text-4xl font-bold">
+                Hi, {{ currentUser.fullname }}!
+              </span>
+              <Button
+                label="Keluar"
+                icon="pi pi-sign-out"
+                class="block mt-3 p-button-sm p-button-outlined p-button-danger"
+              />
+              <Divider class="sm:invisible" />
             </div>
             <div
-              class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center"
+              class="
+                sm:col-span-2
+                lg:col-span-1
+                bg-white
+                px-6
+                py-3
+                rounded-lg
+                shadow-lg
+                flex
+                items-center
+              "
             >
               <div class="flex justify-center items-center mr-5">
                 <i class="pi pi-box bg-green-400 rounded-lg p-4 text-white"></i>
@@ -67,7 +68,7 @@
               <Button
                 label="Export"
                 icon="pi pi-upload"
-                class="p-button-help"
+                class="p-button-help hidden md:block"
                 @click="exportCSV($event)"
               />
             </template>
@@ -219,6 +220,7 @@ import Button from "primevue/button";
 import Toolbar from "primevue/toolbar";
 import InputText from "primevue/inputtext";
 import vSelect from "vue-select";
+import Divider from "primevue/divider";
 import { FilterMatchMode } from "primevue/api";
 import { Form, Field, ErrorMessage } from "vee-validate";
 import * as yup from "yup";
@@ -235,6 +237,7 @@ export default {
     Toolbar,
     InputText,
     vSelect,
+    Divider,
     Form,
     Field,
     ErrorMessage,
