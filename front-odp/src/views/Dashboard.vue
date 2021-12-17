@@ -268,6 +268,7 @@ export default {
     refreshData() {
       this.getAllSales();
       this.getCummulativeSales();
+      this.getSalesRanking();
     },
     updateTime() {
       this.currentTime = new Date().toLocaleTimeString("en-US", {

@@ -3,12 +3,12 @@
     <label for="fullname" class="block font-medium text-gray-700 mt-3"
       >Fullname</label
     >
-    <Field type="text" name="fullname" class="rounded-md" />
-    <ErrorMessage name="fullname" />
+    <Field type="text" name="fullname" class="rounded-md" autocomplete="off" />
+    <ErrorMessage name="fullname" class="text-red-500 text-sm block" />
     <label for="username" class="block font-medium text-gray-700 mt-3"
       >Username</label
     >
-    <Field type="text" name="username" class="rounded-md" />
+    <Field type="text" name="username" class="rounded-md" autocomplete="off" />
     <ErrorMessage name="username" class="text-red-500 text-sm block" />
     <label for="password" class="block font-medium text-gray-700 mt-3"
       >Password</label

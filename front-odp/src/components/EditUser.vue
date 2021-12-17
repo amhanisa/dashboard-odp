@@ -8,12 +8,22 @@
     <label for="fullname" class="block font-medium text-gray-700 mt-3"
       >Fullname</label
     >
-    <Field type="text" name="fullname" class="rounded-md w-full" />
+    <Field
+      type="text"
+      name="fullname"
+      class="rounded-md w-full"
+      autocomplete="off"
+    />
     <ErrorMessage name="fullname" />
     <label for="username" class="block font-medium text-gray-700 mt-3"
       >Username</label
     >
-    <Field type="text" name="username" class="rounded-md w-full" />
+    <Field
+      type="text"
+      name="username"
+      class="rounded-md w-full"
+      autocomplete="off"
+    />
     <ErrorMessage name="username" class="text-red-500 text-sm block" />
     <label for="password" class="block font-medium text-gray-700 mt-3"
       >Password</label

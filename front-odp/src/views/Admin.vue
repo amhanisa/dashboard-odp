@@ -114,7 +114,12 @@
               pointer-events-none
             "
           ></div>
-          <Field type="text" name="name" class="pr-10 rounded-md" />
+          <Field
+            type="text"
+            name="name"
+            class="pr-10 rounded-md"
+            autocomplete="off"
+          />
         </div>
         <ErrorMessage name="name" class="text-red-500 text-sm block" />
 
@@ -156,7 +161,12 @@
               pointer-events-none
             "
           ></div>
-          <Field type="text" name="name" class="pr-10 rounded-md" />
+          <Field
+            type="text"
+            name="name"
+            class="pr-10 rounded-md"
+            autocomplete="off"
+          />
         </div>
         <ErrorMessage name="name" class="text-red-500 text-sm block" />
 

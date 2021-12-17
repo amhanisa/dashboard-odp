@@ -149,7 +149,7 @@
         :validation-schema="schema"
         v-slot="{ isSubmitting }"
         autocomplete="off"
-        class="w-96 mx-auto"
+        class="w-full mx-auto"
       >
         <label for="quantity" class="block text-sm font-medium text-gray-700">
           Jumlah
@@ -168,7 +168,11 @@
           >
             <span class="text-gray-500 sm:text-sm"> KG </span>
           </div>
-          <Field type="number" name="quantity" class="w-96 pr-10 rounded-md" />
+          <Field
+            type="number"
+            name="quantity"
+            class="w-full pr-10 rounded-md"
+          />
         </div>
         <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
 

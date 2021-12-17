@@ -5,15 +5,30 @@
       <label for="username" class="block font-medium text-gray-700 mt-3"
         >Username</label
       >
-      <Field type="text" name="username" class="rounded-md" />
+      <Field
+        type="text"
+        name="username"
+        class="rounded-md"
+        autocomplete="off"
+      />
       <ErrorMessage name="username" class="text-red-500 text-sm block" />
       <label for="password" class="block font-medium text-gray-700 mt-3"
         >Password</label
       >
-      <Field type="password" name="password" class="rounded-md" />
+      <Field
+        type="password"
+        name="password"
+        class="rounded-md"
+        autocomplete="off"
+      />
       <ErrorMessage name="username" class="text-red-500 text-sm block" />
       <Button type="submit" class="p-button-success w-full mt-6">
         Login
+        <i
+          class="pi pi-spin pi-spinner"
+          style="fontsize: 1em"
+          v-if="loading"
+        ></i>
       </Button>
       <p v-if="message">{{ message }}</p>
     </Form>
