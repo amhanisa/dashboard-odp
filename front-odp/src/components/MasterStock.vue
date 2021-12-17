@@ -465,7 +465,6 @@ export default {
     getAllSales() {
       SaleService.getAllSales().then(
         (response) => {
-          console.log(response.data);
           this.sales = response.data.rows;
         },
         (error) => {
@@ -485,7 +484,6 @@ export default {
       this.showModalAddSale = false;
     },
     handleAddSale(formValue, { resetForm }) {
-      console.log(formValue);
       SaleService.addSaleFromAdmin({
         quantity: formValue.quantity,
         editedQuantity: formValue.editedQuantity,
@@ -517,7 +515,6 @@ export default {
       this.showModalEditSale = false;
     },
     handleEditSale(formValue, { resetForm }) {
-      console.log(formValue);
       SaleService.updateSaleValue({
         id: this.selectedSale.id,
         quantity: formValue.quantity,
@@ -559,7 +556,6 @@ export default {
       });
     },
     confirmDeleteSale(data) {
-      console.log(data);
       this.$confirm.require({
         message: `Apa anda yakin menghapus penjualan ${data.quantity} Kg?`,
         header: "Konfirmasi",
@@ -570,8 +566,7 @@ export default {
         rejectClass: "p-button-success p-button-text",
         accept: () => {
           SaleService.deleteUserSale(data)
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               this.getAllSales();
             })
             .catch(() => {
@@ -591,11 +586,8 @@ export default {
     connect: function () {
       console.log("socket connected");
     },
-    newSale: function (data) {
-      console.log(data);
-
+    newSale: function () {
       this.getAllSales();
-
       this.toast("Wuuhuuu");
     },
   },

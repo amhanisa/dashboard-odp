@@ -90,9 +90,6 @@ export default {
   },
   methods: {
     handleEditUser(user) {
-      console.log(user);
-      console.log(this.selectedLocations);
-
       UserService.editUser({
         user: user,
         selectedLocations: this.selectedLocations,

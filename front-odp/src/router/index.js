@@ -9,8 +9,6 @@ const checkAccess = (to, from, next) => {
   const token = tokenService.getLocalAccessToken();
   if (token) {
     next();
-  } else {
-    console.log("asd");
   }
 };
 
@@ -66,6 +64,10 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to) => {
+  document.title = to.meta.title || "One Day Promo with Kujangs";
 });
 
 export default router;

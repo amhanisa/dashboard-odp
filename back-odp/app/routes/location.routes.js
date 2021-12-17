@@ -12,10 +12,14 @@ module.exports = (app) => {
 
   app.get(
     "/api/location/all",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isAdmin],
     controller.getAllLocation
   );
-  app.post("/api/location/add", [authJwt.verifyToken], controller.addLocation);
+  app.post(
+    "/api/location/add",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.addLocation
+  );
   app.post(
     "/api/location/delete",
     [authJwt.verifyToken, authJwt.isAdmin],

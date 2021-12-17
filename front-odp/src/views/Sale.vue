@@ -24,6 +24,7 @@
                 label="Keluar"
                 icon="pi pi-sign-out"
                 class="block mt-3 p-button-sm p-button-outlined p-button-danger"
+                @click="logout"
               />
               <Divider class="sm:invisible" />
             </div>
@@ -86,9 +87,11 @@
               <div
                 class="
                   table-header
-                  flex flex-column
+                  flex flex-col
+                  md:flex-row
                   justify-between
-                  items-center
+                  items-start
+                  md:items-center
                 "
               >
                 <h5 class="font-bold text-xl">Manage Sale</h5>
@@ -294,7 +297,6 @@ export default {
     getUserSales() {
       SaleService.getUserSales().then(
         (response) => {
-          console.log(response.data);
           this.userSales = response.data;
         },
         (error) => {
@@ -352,7 +354,6 @@ export default {
       });
     },
     confirmDeleteSale(data) {
-      console.log(data);
       this.$confirm.require({
         message: `Apa anda yakin menghapus penjualan ${data.quantity} Kg?`,
         header: "Konfirmasi",
@@ -363,8 +364,7 @@ export default {
         rejectClass: "p-button-success p-button-text",
         accept: () => {
           SaleService.deleteUserSale(data)
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               this.getUserSales();
             })
             .catch(() => {
@@ -378,6 +378,10 @@ export default {
     },
     exportCSV() {
       this.$refs.dt.exportCSV();
+    },
+    logout() {
+      this.$store.dispatch("auth/logout");
+      this.$router.push("login");
     },
   },
 };

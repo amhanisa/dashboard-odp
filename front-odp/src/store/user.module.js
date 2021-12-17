@@ -20,7 +20,6 @@ const users = {
     refreshCurrentUserLocations({ commit }) {
       return UserService.getUser().then(
         (res) => {
-          console.log(res.data);
           commit("refreshCurrentUserLocations", res.data);
           return Promise.resolve(res.data);
         },

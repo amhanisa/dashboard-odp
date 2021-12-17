@@ -19,7 +19,7 @@ module.exports = (app) => {
   );
   app.post(
     "/api/sale/updateValue",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isAdmin],
     controller.updateSaleValue
   );
 
@@ -36,15 +36,24 @@ module.exports = (app) => {
 
   app.post(
     "/api/sale/addSaleFromAdmin",
-    [authJwt.verifyToken],
+    [authJwt.verifyToken, authJwt.isAdmin],
     controller.addSaleFromAdmin
   );
 
   //FOR DASHBOARD
   app.get(
     "/api/dashboard/cummulative",
+    [authJwt.verifyToken, authJwt.isAdmin],
     controller.getCummulativeSalesForDashboard
   );
-  app.get("/api/dashboard/allSales", controller.getAllSalesForDashboard);
-  app.get("/api/dashboard/salesRanking", controller.getSalesRanking);
+  app.get(
+    "/api/dashboard/allSales",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getAllSalesForDashboard
+  );
+  app.get(
+    "/api/dashboard/salesRanking",
+    [authJwt.verifyToken, authJwt.isAdmin],
+    controller.getSalesRanking
+  );
 };

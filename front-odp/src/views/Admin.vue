@@ -249,8 +249,7 @@ export default {
     },
     handleAddLocation(name, { resetForm }) {
       LocationService.addLocation(name).then(
-        (res) => {
-          console.log(res);
+        () => {
           this.showModalAddLocation = false;
           resetForm();
           this.getAllLocations();
@@ -270,8 +269,7 @@ export default {
         id: this.selectedLocation.id,
         name: name,
       }).then(
-        (res) => {
-          console.log(res);
+        () => {
           this.showModalEditLocation = false;
           resetForm();
           this.getAllLocations();
@@ -297,8 +295,7 @@ export default {
         rejectClass: "p-button-success p-button-text",
         accept: () => {
           LocationService.deleteLocation(data)
-            .then((res) => {
-              console.log(res);
+            .then(() => {
               this.getAllLocations();
             })
             .catch(() => {

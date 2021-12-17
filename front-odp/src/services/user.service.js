@@ -10,8 +10,6 @@ class UserService {
   }
 
   editUser({ user, selectedLocations }) {
-    console.log(user);
-    console.log(selectedLocations);
     return api.post("user/edit", {
       user,
       selectedLocations,

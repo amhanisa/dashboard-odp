@@ -2,14 +2,10 @@ import api from "./api";
 
 class SaleService {
   addSale({ quantity, selectedLocation }) {
-    return api
-      .post("sale/add", {
-        quantity,
-        selectedLocation,
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    return api.post("sale/add", {
+      quantity,
+      selectedLocation,
+    });
   }
 
   getUserSales() {
@@ -17,17 +13,10 @@ class SaleService {
   }
 
   deleteUserSale({ id }) {
-    return api
-      .post("sale/delete", {
-        id,
-      })
-      .then((res) => {
-        console.log(res);
-      });
+    return api.post("sale/delete", { id });
   }
 
   updateSaleValue(sale) {
-    console.log(sale);
     return api.post("sale/updateValue", { sale });
   }
 

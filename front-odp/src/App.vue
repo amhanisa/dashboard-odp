@@ -1,5 +1,5 @@
 <template>
-  <div id="nav">
+  <div id="nav" v-if="isAdmin">
     <router-link to="/">Home</router-link> |
     <router-link to="/sale">Sale</router-link> |
     <router-link to="/dashboard">Dashboard</router-link> |
@@ -9,6 +9,7 @@
     <router-link to="/login">Login</router-link> |
     <button @click="logout">Logout</button>
   </div>
+  <div v-else class="mb-12"></div>
   <router-view />
   <Footer />
 </template>
@@ -24,6 +25,21 @@ export default {
     logout() {
       this.$store.dispatch("auth/logout");
       this.$router.push("login");
+    },
+  },
+  mounted() {
+    console.log(this.$store.state.auth.user.role);
+  },
+  computed: {
+    isAdmin() {
+      if (!this.$store.state.auth.user) {
+        return false;
+      }
+      if (this.$store.state.auth.user.role === "ROLE_ADMIN") {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 };
