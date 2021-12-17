@@ -96,7 +96,7 @@
               field="editedQuantity"
               header="Jumlah Perbaikan"
               :sortable="true"
-              filterField="quantity"
+              filterField="editedQuantity"
             >
               <template #body="slotProps">
                 {{ formatKilogram(slotProps.data.editedQuantity) }}
@@ -544,10 +544,11 @@ export default {
     formatDate(value) {
       const date = new Date(value);
 
-      const formatted = date.toLocaleTimeString("id-ID", {
+      const formatted = date.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         second: "2-digit",
+        hour12: false,
       });
       return formatted;
     },

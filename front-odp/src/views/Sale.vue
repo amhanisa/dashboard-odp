@@ -3,17 +3,54 @@
     <p>{{ content }}</p>
     <section>
       <div class="container mx-auto">
-        <div class="flex justify-between mb-6">
-          <div class="mb-6">
-            <h2 class="text-3xl">Data Penjualan Pupuk NPK</h2>
-            <h2 class="text-3xl">{{ currentUser.fullname }}</h2>
+        <section>
+          <div
+            class="
+              container
+              mx-auto
+              grid grid-rows-1
+              sm:grid-cols-4
+              gap-2
+              mb-6
+              p-6
+            "
+          >
+            <div class="sm:col-span-2 flex items-center">
+              <span class="text-4xl font-bold"
+                >Hi, {{ currentUser.fullname }}!</span
+              >
+            </div>
+
+            <div
+              class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center"
+            >
+              <div class="flex justify-center items-center mr-5">
+                <i
+                  class="pi pi-book bg-green-400 rounded-lg p-4 text-white"
+                ></i>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-300">Total Transaksi</h2>
+                <span class="text-4xl font-bold inline-block">
+                  {{ totalTransactions }}
+                </span>
+              </div>
+            </div>
+            <div
+              class="bg-white px-6 py-3 rounded-lg shadow-lg flex items-center"
+            >
+              <div class="flex justify-center items-center mr-5">
+                <i class="pi pi-box bg-green-400 rounded-lg p-4 text-white"></i>
+              </div>
+              <div>
+                <h2 class="font-bold text-gray-300">Total Penjualan</h2>
+                <span class="text-4xl font-bold inline-block">
+                  {{ formatKilogram(totalUserSales) }}
+                </span>
+              </div>
+            </div>
           </div>
-          <div class="bg-white p-5 rounded-lg shadow-lg text-right">
-            <h2 class="text-gray-700">Total Penjualan</h2>
-            <h3 class="text-3xl font-bold">{{ totalUserSales }}</h3>
-            <small class="text-gray-700">Kg</small>
-          </div>
-        </div>
+        </section>
 
         <div class="bg-white rounded-lg shadow-lg p-5">
           <Toolbar class="p-mb-4">
@@ -35,13 +72,28 @@
               />
             </template>
           </Toolbar>
-          <DataTable :value="userSales" :paginator="true" :rows="10" ref="dt">
+          <DataTable
+            :value="userSales"
+            :paginator="true"
+            :rows="10"
+            ref="dt"
+            dataKey="id"
+            v-model:filters="filters"
+            :globalFilterFields="['createdAt', 'location.name', 'quantity']"
+          >
             <template #header>
-              <div class="table-header flex flex-column justify-between">
+              <div
+                class="
+                  table-header
+                  flex flex-column
+                  justify-between
+                  items-center
+                "
+              >
                 <h5 class="font-bold text-xl">Manage Sale</h5>
                 <InputText
                   v-model="filters['global'].value"
-                  placeholder="Keyword Search"
+                  placeholder="Cari Data"
                 />
               </div>
             </template>
@@ -58,6 +110,9 @@
               :sortable="true"
               filterField="quantity"
             >
+              <template #body="slotProps">
+                {{ formatKilogram(slotProps.data.quantity) }}
+              </template>
             </Column>
             <Column :exportable="false" style="min-width: 8rem">
               <template #body="slotProps">
@@ -79,15 +134,21 @@
       </div>
     </section>
 
-    <Dialog header="Tambah Penjualan" v-model:visible="showModalAddSale">
+    <Dialog
+      header="Tambah Penjualan"
+      v-model:visible="showModalAddSale"
+      :maximizable="true"
+    >
       <Form
         id="addSale"
         @submit="handleAddSale"
         :validation-schema="schema"
         v-slot="{ isSubmitting }"
+        autocomplete="off"
+        class="w-96 mx-auto"
       >
         <label for="quantity" class="block text-sm font-medium text-gray-700">
-          Quantity
+          Jumlah
         </label>
         <div class="relative">
           <div
@@ -103,7 +164,7 @@
           >
             <span class="text-gray-500 sm:text-sm"> KG </span>
           </div>
-          <Field type="number" name="quantity" class="pr-10 rounded-md" />
+          <Field type="number" name="quantity" class="w-96 pr-10 rounded-md" />
         </div>
         <ErrorMessage name="quantity" class="text-red-500 text-sm block" />
 
@@ -114,7 +175,7 @@
             for="quantity"
             class="block text-sm font-medium text-gray-700 mt-3"
           >
-            Location
+            Lokasi
           </label>
           <vSelect
             v-model="selectedLocation"
@@ -123,6 +184,7 @@
             :searchable="true"
             :filterable="true"
             class="block w-full rounded-md"
+            placeholder="Cari Lokasi..."
           />
         </div>
         <ErrorMessage name="location" class="text-red-500 text-sm block" />
@@ -179,7 +241,11 @@ export default {
   },
   data() {
     const schema = yup.object().shape({
-      quantity: yup.number().required("Mohon isi jumlah"),
+      quantity: yup
+        .number()
+        .min(1, "Mohon isi diatas 1 kg")
+        .required("Mohon isi jumlah")
+        .typeError("Mohon isi jumlah"),
       location: yup
         .object("")
         .required("Location required")
@@ -193,7 +259,6 @@ export default {
       content: "",
       filters: {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        quantity: { value: null, matchMode: FilterMatchMode.EQUALS },
       },
       schema,
     };
@@ -269,15 +334,19 @@ export default {
     formatDate(value) {
       const date = new Date(value);
 
-      const formatted = date.toLocaleDateString("id-ID", {
-        weekday: "long",
-        year: "numeric",
-        month: "2-digit",
-        day: "numeric",
+      const formatted = date.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
       });
       return formatted;
+    },
+    formatKilogram(value) {
+      return value.toLocaleString("id-ID", {
+        style: "unit",
+        unit: "kilogram",
+      });
     },
     confirmDeleteSale(data) {
       console.log(data);
