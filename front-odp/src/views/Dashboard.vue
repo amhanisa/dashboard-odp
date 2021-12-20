@@ -56,7 +56,7 @@
         </div>
 
         <div class="bg-white p-6 rounded-lg shadow-lg row-span-2">
-          <DataTable :value="allSales" :paginator="true" :rows="10" ref="dt">
+          <DataTable :value="allSales" :paginator="true" :rows="6" ref="dt">
             <template #header>
               <div class="table-header flex flex-column justify-between">
                 <h5 class="font-bold text-xl">Penjualan Terbaru</h5>
