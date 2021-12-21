@@ -269,6 +269,14 @@ export default {
       this.getAllSales();
       this.getCummulativeSales();
       this.getSalesRanking();
+
+      // this.toast({
+      //   component: CustomToast,
+      //   props: {
+      //     quantity: 1000,
+      //     location: "Eka Wati - CV Mandiri Perkasa",
+      //   },
+      // });
     },
     updateTime() {
       this.currentTime = new Date().toLocaleTimeString("en-US", {
@@ -286,6 +294,7 @@ export default {
     sale: function (data) {
       this.getAllSales();
       this.getCummulativeSales();
+      this.getSalesRanking();
 
       this.toast({
         component: CustomToast,

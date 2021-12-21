@@ -25,5 +25,5 @@ createApp(App)
   .use(new VueSocketIO(socketOptions))
   .use(PrimeVue)
   .use(ConfirmationService)
-  .use(Toast, { position: POSITION.TOP_CENTER, maxToasts: 4 })
+  .use(Toast, { position: POSITION.TOP_CENTER, maxToasts: 2 })
   .mount("#app");
