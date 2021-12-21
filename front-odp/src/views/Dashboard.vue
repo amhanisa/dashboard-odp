@@ -70,13 +70,13 @@
             <Column field="location.name" header="Lokasi" :sortable="true">
             </Column>
             <Column
-              field="editedQuantity"
+              field="quantity"
               header="Jumlah"
               :sortable="true"
               filterField="quantity"
             >
               <template #body="slotProps">
-                {{ formatKilogram(slotProps.data.editedQuantity) }}
+                {{ formatKilogram(slotProps.data.quantity) }}
               </template>
             </Column>
             <template #empty> Belum ada penjualan. </template>

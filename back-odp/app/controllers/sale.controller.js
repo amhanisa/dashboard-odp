@@ -87,7 +87,7 @@ exports.addSaleFromAdmin = async (req, res) => {
 };
 
 exports.getTotalSales = async (req, res) => {
-  let total = await Sale.sum("editedQuantity");
+  let total = await Sale.sum("quantity");
 
   res.status(200).send({ total: total });
 };
@@ -110,7 +110,7 @@ exports.getAllSalesForDashboard = async (req, res) => {
       order: [["createdAt", "DESC"]],
     });
 
-    let sum = await Sale.sum("editedQuantity", {
+    let sum = await Sale.sum("quantity", {
       where: { status: true },
     });
 
@@ -125,7 +125,7 @@ exports.getCummulativeSalesForDashboard = async (req, res) => {
     `
     SELECT *, SUM(grouped.sum) OVER(ORDER BY createdAt) AS cummulative_sum
     FROM (
-      SELECT * , sum(editedQuantity) as sum
+      SELECT * , sum(quantity) as sum
       FROM sales
       WHERE status=1
       GROUP BY date(createdAt), ( 4 * HOUR( createdAt ) + FLOOR( MINUTE( createdAt ) / 15 ))
@@ -141,7 +141,7 @@ exports.getSalesRanking = async (req, res) => {
   try {
     let rank = await db.sequelize.query(
       `
-      SELECT *, sum(editedQuantity) as sum
+      SELECT *, sum(quantity) as sum
       FROM sales
       JOIN locations ON sales.locationId = locations.id
       WHERE status=1
